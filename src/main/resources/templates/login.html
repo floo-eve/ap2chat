@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ap2-chat — Sign in</title>
+    <link rel="stylesheet" th:href="@{/css/chat.css}">
+</head>
+<body>
+<main class="login-app">
+    <h1>ap2-chat</h1>
+    <p class="subtitle">Sign in to continue</p>
+
+    <div th:if="${param.error}" class="message error">Invalid username or password.</div>
+    <div th:if="${param.logout}" class="message assistant">You have been logged out.</div>
+
+    <form th:action="@{/login}" method="post" class="login-form">
+        <label for="username">Username</label>
+        <input id="username" type="text" name="username" autocomplete="username" required autofocus>
+
+        <label for="password">Password</label>
+        <input id="password" type="password" name="password" autocomplete="current-password" required>
+
+        <button type="submit">Sign in</button>
+    </form>
+</main>
+</body>
+</html>

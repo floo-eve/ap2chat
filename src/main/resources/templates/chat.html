@@ -12,7 +12,13 @@
             <h1>ap2-chat</h1>
             <p class="subtitle">Local LLM chat via Ollama + Spring AI</p>
         </div>
-        <button id="clear-button" type="button" class="clear-button">Clear conversation</button>
+        <div class="header-actions">
+            <span class="username" th:text="'Signed in as ' + ${username}"></span>
+            <button id="clear-button" type="button" class="clear-button">Clear conversation</button>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="clear-button">Log out</button>
+            </form>
+        </div>
     </div>
 
     <div id="messages" class="messages"></div>
@@ -28,12 +34,6 @@
     const input = document.getElementById('message-input');
     const messages = document.getElementById('messages');
     const clearButton = document.getElementById('clear-button');
-
-    let conversationId = localStorage.getItem('ap2chat-conversation-id');
-    if (!conversationId) {
-        conversationId = crypto.randomUUID();
-        localStorage.setItem('ap2chat-conversation-id', conversationId);
-    }
 
     function addMessage(text, role) {
         const div = document.createElement('div');
@@ -58,10 +58,7 @@
         try {
             const res = await fetch('/api/chat', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Conversation-Id': conversationId
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: userMessage })
             });
             if (!res.ok) throw new Error('Request failed: ' + res.status);
@@ -80,10 +77,7 @@
     clearButton.addEventListener('click', async () => {
         clearButton.disabled = true;
         try {
-            await fetch('/api/chat', {
-                method: 'DELETE',
-                headers: { 'X-Conversation-Id': conversationId }
-            });
+            await fetch('/api/chat', { method: 'DELETE' });
             messages.innerHTML = '';
         } finally {
             clearButton.disabled = false;

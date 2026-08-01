@@ -1,11 +1,11 @@
 package ch.devzone.ap2chat;
 
+import java.security.Principal;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,9 +26,9 @@ public class ChatApiController {
     }
 
     @PostMapping("/api/chat")
-    public ChatResponse chat(@RequestBody ChatRequest request, @RequestHeader("X-Conversation-Id") String conversationId) {
+    public ChatResponse chat(@RequestBody ChatRequest request, Principal principal) {
         String reply = chatClient.prompt()
-                .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, conversationId))
+                .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, principal.getName()))
                 .user(request.message())
                 .call()
                 .content();
@@ -36,7 +36,7 @@ public class ChatApiController {
     }
 
     @DeleteMapping("/api/chat")
-    public void clear(@RequestHeader("X-Conversation-Id") String conversationId) {
-        chatMemory.clear(conversationId);
+    public void clear(Principal principal) {
+        chatMemory.clear(principal.getName());
     }
 }
