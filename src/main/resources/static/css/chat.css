@@ -21,8 +21,36 @@ h1 {
 }
 
 .subtitle {
-    margin: 0 0 1rem;
+    margin: 0.25rem 0 0;
     color: #666;
+}
+
+.app-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.clear-button {
+    padding: 0.5rem 0.9rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background: white;
+    color: #444;
+    font-size: 0.9rem;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.clear-button:hover {
+    background: #f4f4f5;
+}
+
+.clear-button:disabled {
+    opacity: 0.6;
+    cursor: default;
 }
 
 .messages {
