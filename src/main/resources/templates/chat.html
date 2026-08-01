@@ -21,7 +21,18 @@
         </div>
     </div>
 
-    <div id="messages" class="messages"></div>
+    <details class="facts-panel">
+        <summary>About you</summary>
+        <div id="facts-list" class="facts-list"></div>
+        <form id="facts-form" class="facts-form">
+            <input id="fact-input" type="text" placeholder="Add a fact about yourself…" autocomplete="off" required>
+            <button type="submit">Add</button>
+        </form>
+    </details>
+
+    <div id="messages" class="messages">
+        <div class="message assistant" th:text="'Hi ' + ${username} + ', how can I help you today?'"></div>
+    </div>
 
     <form id="chat-form" class="chat-form">
         <input id="message-input" type="text" placeholder="Ask something…" autocomplete="off" required>
@@ -34,6 +45,55 @@
     const input = document.getElementById('message-input');
     const messages = document.getElementById('messages');
     const clearButton = document.getElementById('clear-button');
+    const greetingHtml = messages.innerHTML;
+    const factsList = document.getElementById('facts-list');
+    const factsForm = document.getElementById('facts-form');
+    const factInput = document.getElementById('fact-input');
+
+    function renderFact(fact) {
+        const row = document.createElement('div');
+        row.className = 'fact-item';
+
+        const text = document.createElement('span');
+        text.textContent = fact.fact;
+
+        const removeButton = document.createElement('button');
+        removeButton.type = 'button';
+        removeButton.className = 'fact-remove';
+        removeButton.textContent = '×';
+        removeButton.addEventListener('click', async () => {
+            removeButton.disabled = true;
+            await fetch('/api/facts/' + fact.id, { method: 'DELETE' });
+            row.remove();
+        });
+
+        row.appendChild(text);
+        row.appendChild(removeButton);
+        factsList.appendChild(row);
+    }
+
+    async function loadFacts() {
+        const res = await fetch('/api/facts');
+        const facts = await res.json();
+        factsList.innerHTML = '';
+        facts.forEach(renderFact);
+    }
+
+    factsForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fact = factInput.value.trim();
+        if (!fact) return;
+        factInput.value = '';
+
+        const res = await fetch('/api/facts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ fact })
+        });
+        renderFact(await res.json());
+    });
+
+    loadFacts();
 
     function addMessage(text, role) {
         const div = document.createElement('div');
@@ -78,7 +138,7 @@
         clearButton.disabled = true;
         try {
             await fetch('/api/chat', { method: 'DELETE' });
-            messages.innerHTML = '';
+            messages.innerHTML = greetingHtml;
         } finally {
             clearButton.disabled = false;
         }

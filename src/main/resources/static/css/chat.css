@@ -133,6 +133,75 @@ h1 {
     background: #1d4ed8;
 }
 
+.facts-panel {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+}
+
+.facts-panel summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: #444;
+}
+
+.facts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin: 0.75rem 0;
+}
+
+.fact-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.4rem 0.6rem;
+    background: #f4f4f5;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.fact-remove {
+    border: none;
+    background: none;
+    color: #991b1b;
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 0.25rem;
+}
+
+.facts-form {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.facts-form input {
+    flex: 1;
+    padding: 0.5rem 0.7rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 0.9rem;
+}
+
+.facts-form button {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    border: none;
+    background: #2563eb;
+    color: white;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.facts-form button:hover {
+    background: #1d4ed8;
+}
+
 .login-app {
     width: 100%;
     max-width: 360px;
